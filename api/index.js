@@ -7,9 +7,13 @@ app.use(cors());
 app.use(express.json());
 
 const EMAIL = "nishtha1374.be23@chitkara.edu.in";
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+
+/* ---------- ROOT ROUTE (IMPORTANT) ---------- */
+app.get("/", (req, res) => {
+  res.status(200).json({
+    message: "Chitkara Qualifier API is running 🚀",
+    official_email: EMAIL
+  });
 });
 
 /* ---------- Utility Functions ---------- */
@@ -31,11 +35,8 @@ const isPrime = (num) => {
 };
 
 const gcd = (a, b) => (b === 0 ? a : gcd(b, a % b));
-
 const hcf = (arr) => arr.reduce((a, b) => gcd(a, b));
-
-const lcm = (arr) =>
-  arr.reduce((a, b) => (a * b) / gcd(a, b));
+const lcm = (arr) => arr.reduce((a, b) => (a * b) / gcd(a, b));
 
 /* ---------- POST /bfhl ---------- */
 app.post("/bfhl", async (req, res) => {
@@ -106,8 +107,7 @@ app.post("/bfhl", async (req, res) => {
       );
 
       const answer =
-        response.data.candidates[0].content.parts[0].text
-          .split(" ")[0];
+        response.data.candidates[0].content.parts[0].text.split(" ")[0];
 
       return res.json({
         is_success: true,
@@ -138,4 +138,5 @@ app.get("/health", (req, res) => {
   });
 });
 
+/* ✅ SINGLE export for Vercel */
 export default app;
